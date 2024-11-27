@@ -189,11 +189,7 @@ export default function CreditCardCalculator() {
           </div>
         </div>
 
-        <ReviewSection 
-          initialReviewCount={8765}
-          initialRating={4.8}
-          calculatorType="credit-card"
-        />
+        <ReviewSection calculatorType="credit-card" />
 
         <FAQSection faqs={faqData} />
       </main>

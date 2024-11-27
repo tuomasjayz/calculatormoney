@@ -189,11 +189,7 @@ export default function LoanInterestCalculator() {
           </div>
         </div>
 
-        <ReviewSection 
-          initialReviewCount={29876}
-          initialRating={4.7}
-          calculatorType="loan-interest"
-        />
+        <ReviewSection calculatorType="loan-interest" />
 
         <FAQSection faqs={faqData} />
       </main>
