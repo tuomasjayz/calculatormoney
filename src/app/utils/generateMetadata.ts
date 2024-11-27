@@ -1,16 +1,24 @@
 import { Metadata } from 'next';
-import { useReviews } from '../context/ReviewContext';
+import { CalculatorType } from './calculatorTypes';
+
+const defaultReviews = {
+  'loan-payment': { count: 12567, rating: 4.9 },
+  'mortgage-interest': { count: 15234, rating: 4.8 },
+  'credit-card': { count: 8765, rating: 4.8 },
+  'compound-interest': { count: 9876, rating: 4.7 },
+  'savings-goal': { count: 8432, rating: 4.8 },
+  'loan-interest': { count: 29876, rating: 4.7 },
+  'continuous-compound': { count: 7654, rating: 4.9 }
+};
 
 export function generateCalculatorMetadata(
-  calculatorType: string,
+  calculatorType: CalculatorType,
   title: string,
   description: string,
   keywords: string[],
   faqData: { question: string, answer: string }[]
 ): Metadata {
-  // Get reviews from context
-  const { getReviews } = useReviews();
-  const reviews = getReviews(calculatorType as any); // Type assertion since we know the calculatorType is valid
+  const reviews = defaultReviews[calculatorType];
 
   const schemaData = [{
     "@context": "https://schema.org",
