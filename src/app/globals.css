@@ -2,69 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Base styles */
 @layer base {
   body {
-    color: var(--gray-700);
+    color: #374151;  /* text-gray-700 */
   }
 
   input[type="number"],
   input[type="text"],
   input[type="email"],
   textarea {
-    color: var(--gray-700);
-  }
-
-  /* White background text */
-  .bg-white {
-    color: var(--gray-700);
-  }
-
-  /* Headings */
-  h1, h2, h3, h4, h5, h6 {
-    color: var(--golden-700);
-  }
-
-  /* Summary boxes */
-  .bg-golden-50 .bg-white {
-    color: var(--gray-700);
-  }
-
-  /* Slider styles */
-  input[type="range"] {
-    accent-color: var(--golden-600);
-  }
-
-  input[type="range"]::-webkit-slider-thumb {
-    background-color: var(--golden-600);
-  }
-
-  input[type="range"]::-moz-range-thumb {
-    background-color: var(--golden-600);
-  }
-
-  /* Mobile text visibility */
-  @media (max-width: 768px) {
-    input, select, textarea {
-      color: var(--gray-700) !important;
-    }
-    
-    .bg-white * {
-      color: var(--gray-700);
-    }
+    color: #374151 !important;
   }
 }
 
-/* Custom slider styles */
+/* Component styles */
 @layer components {
-  input[type="range"] {
-    @apply accent-golden-600;
+  .bg-white * {
+    color: #374151;
   }
 
-  input[type="range"]::-webkit-slider-thumb {
-    @apply bg-golden-600;
+  .bg-golden-50 .bg-white * {
+    color: #374151;
   }
 
-  input[type="range"]::-moz-range-thumb {
-    @apply bg-golden-600;
+  .slider-label {
+    color: #374151;
+    font-weight: 500;
+  }
+
+  .slider-value {
+    color: #4B5563;  /* text-gray-600 */
+  }
+}
+
+/* Mobile fixes */
+@media (max-width: 768px) {
+  input[type="number"],
+  input[type="text"] {
+    color: #374151 !important;
+    -webkit-text-fill-color: #374151 !important;
+  }
+
+  .bg-white input {
+    color: #374151 !important;
+    -webkit-text-fill-color: #374151 !important;
+  }
+
+  .slider-value {
+    color: #4B5563 !important;
+    -webkit-text-fill-color: #4B5563 !important;
   }
 }
