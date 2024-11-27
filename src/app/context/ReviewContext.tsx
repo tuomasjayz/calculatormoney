@@ -18,7 +18,8 @@ const ReviewContext = createContext<ReviewContextType | undefined>(undefined);
 const defaultReviews: Record<CalculatorType, ReviewData> = {
   'loan-payment': { count: 12567, rating: 4.9 },
   'mortgage-interest': { count: 15234, rating: 4.8 },
-  'credit-card': { count: 8765, rating: 4.8 },  // Changed from 'credit-card-interest'
+  'credit-card': { count: 8765, rating: 4.8 },
+  'credit-card-interest': { count: 9543, rating: 4.8 },  // Add this
   'compound-interest': { count: 9876, rating: 4.7 },
   'savings-goal': { count: 8432, rating: 4.8 },
   'loan-interest': { count: 29876, rating: 4.7 },
