@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+
+# Allow all calculator pages
+Allow: /calculators/
+Allow: /calculators/*
+
+# Allow legal pages
+Allow: /privacy-policy
+Allow: /terms-of-service
+
+# Sitemap location
+Sitemap: https://calculatormoney.com/sitemap.xml
+
+# Additional helpful information
+# Main sections:
+# / - Homepage
+# /calculators/ - All financial calculators
+# /calculators/mortgage-interest - Mortgage calculator
+# /calculators/loan-payment - Loan payment calculator
+# /calculators/loan-interest - Loan interest calculator
+# /calculators/credit-card - Credit card calculator
+# /calculators/compound-interest - Compound interest calculator
+# /calculators/continuous-compound - Continuous compound calculator
+# /calculators/savings-goal - Savings goal calculator
+# /privacy-policy - Privacy policy
+# /terms-of-service - Terms of service
+
+# Contact: webmaster@calculatormoney.com 
