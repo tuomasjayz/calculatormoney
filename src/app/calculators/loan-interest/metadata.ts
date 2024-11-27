@@ -39,4 +39,4 @@ export const metadata = generateCalculatorMetadata(
     'interest charges calculator'
   ],
   faqData
-); 
+);
