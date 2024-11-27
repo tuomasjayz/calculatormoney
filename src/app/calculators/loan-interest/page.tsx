@@ -1,4 +1,4 @@
-'use client';
+ 'use client';
 
 import { useState, useEffect } from 'react';
 import Header from '../../components/Header';
@@ -6,57 +6,58 @@ import Footer from '../../components/Footer';
 import DynamicSlider from '../../components/DynamicSlider';
 import ReviewSection from '../../components/ReviewSection';
 import FAQSection from '../../components/FAQSection';
-import PieChart from '../../components/charts/PieChart';
-import BarChart from '../../components/charts/BarChart';
+import PieChart from '../../components/PieChart';
+import BarChart from '../../components/BarChart';
+import { CalculatorType } from '../../utils/calculatorTypes';
 
 export default function LoanInterestCalculator() {
   const [loanAmount, setLoanAmount] = useState(100000);
   const [interestRate, setInterestRate] = useState(5);
-  const [loanTerm, setLoanTerm] = useState(15);
+  const [loanTerm, setLoanTerm] = useState(30);
   const [monthlyPayment, setMonthlyPayment] = useState<number>(0);
   const [totalInterest, setTotalInterest] = useState<number>(0);
   const [totalPayment, setTotalPayment] = useState<number>(0);
 
   useEffect(() => {
-    calculateLoanDetails();
+    calculateLoanInterest();
   }, [loanAmount, interestRate, loanTerm]);
 
-  const calculateLoanDetails = () => {
-    const principal = loanAmount;
-    const calculatedInterestRate = interestRate / 100 / 12;
-    const numberOfPayments = loanTerm * 12;
+  const calculateLoanInterest = () => {
+    const principal = Number(loanAmount);
+    const annualRate = Number(interestRate) / 100;
+    const months = Number(loanTerm) * 12;
+    const monthlyRate = annualRate / 12;
 
-    if (principal && calculatedInterestRate && numberOfPayments) {
-      const monthlyPaymentCalc = 
-        principal * 
-        (calculatedInterestRate * Math.pow(1 + calculatedInterestRate, numberOfPayments)) / 
-        (Math.pow(1 + calculatedInterestRate, numberOfPayments) - 1);
-      
-      const totalPaymentCalc = monthlyPaymentCalc * numberOfPayments;
-      const totalInterestCalc = totalPaymentCalc - principal;
+    // Calculate monthly payment using amortization formula
+    const monthlyPmt = principal * (monthlyRate * Math.pow(1 + monthlyRate, months)) / 
+                      (Math.pow(1 + monthlyRate, months) - 1);
 
-      setMonthlyPayment(Number(monthlyPaymentCalc.toFixed(2)));
-      setTotalInterest(Number(totalInterestCalc.toFixed(2)));
-      setTotalPayment(Number(totalPaymentCalc.toFixed(2)));
-    }
+    const totalPmt = monthlyPmt * months;
+    const totalInt = totalPmt - principal;
+
+    setMonthlyPayment(Number(monthlyPmt.toFixed(2)));
+    setTotalInterest(Number(totalInt.toFixed(2)));
+    setTotalPayment(Number(totalPmt.toFixed(2)));
   };
+
+  const calculatorType: CalculatorType = 'loan-interest';
 
   const faqData = [
     {
       question: "How is loan interest calculated?",
-      answer: "Loan interest is calculated using the annual interest rate divided by 12 (for monthly payments) and the loan amount. The formula takes into account compound interest over the loan term."
+      answer: "Loan interest is calculated based on your principal amount, interest rate, and loan term. The interest can be simple (calculated only on principal) or compound (calculated on principal and accumulated interest)."
     },
     {
       question: "What factors affect my loan interest rate?",
-      answer: "Several factors influence your loan interest rate, including credit score, loan term, loan amount, market conditions, and the type of loan."
+      answer: "Several factors influence your loan interest rate, including credit score, loan term length, loan amount, market conditions, loan type, and the lender's policies."
     },
     {
-      question: "How can I lower my monthly loan payments?",
-      answer: "You can lower your monthly payments by: extending the loan term, making a larger down payment, finding a lower interest rate, or improving your credit score before applying."
+      question: "How can I reduce my loan interest costs?",
+      answer: "You can reduce loan interest costs by making larger down payments, choosing shorter loan terms, improving your credit score, making extra payments, or refinancing to a lower rate."
     },
     {
-      question: "Should I choose a shorter or longer loan term?",
-      answer: "A shorter loan term typically means higher monthly payments but less total interest paid. A longer term reduces monthly payments but increases the total interest cost."
+      question: "What's the difference between APR and interest rate?",
+      answer: "The interest rate is the basic cost of borrowing, while APR (Annual Percentage Rate) includes both the interest rate and other loan costs like fees and points."
     }
   ];
 
@@ -69,7 +70,7 @@ export default function LoanInterestCalculator() {
         </h1>
         
         <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-          Calculate your monthly loan payments, total interest, and see how different loan terms and interest rates affect your payments.
+          Calculate total interest costs and see payment breakdowns for any loan. Compare different scenarios to make informed borrowing decisions.
         </p>
 
         <div className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-8 mb-8">
@@ -85,7 +86,7 @@ export default function LoanInterestCalculator() {
             />
 
             <DynamicSlider
-              label="Interest Rate (%)"
+              label="Annual Interest Rate (%)"
               value={interestRate}
               onChange={setInterestRate}
               min={0.1}
@@ -99,9 +100,9 @@ export default function LoanInterestCalculator() {
               value={loanTerm}
               onChange={setLoanTerm}
               min={1}
-              max={30}
+              max={40}
               step={1}
-              defaultValue={15}
+              defaultValue={30}
             />
 
             <div className="mt-8 bg-golden-50 p-6 rounded-lg">
@@ -146,11 +147,11 @@ export default function LoanInterestCalculator() {
             </div>
             <div className="h-[300px]">
               <BarChart 
-                title="Yearly Breakdown"
+                title="Monthly Payment Breakdown"
                 data={{
-                  labels: Array.from({ length: loanTerm }, (_, i) => `Year ${i + 1}`),
-                  primaryValues: Array(loanTerm).fill(loanAmount / loanTerm),
-                  secondaryValues: Array(loanTerm).fill(totalInterest / loanTerm),
+                  labels: ['Monthly Payment'],
+                  primaryValues: [monthlyPayment - (loanAmount * (interestRate/100/12))],
+                  secondaryValues: [loanAmount * (interestRate/100/12)],
                   primaryLabel: 'Principal',
                   secondaryLabel: 'Interest'
                 }}
@@ -159,38 +160,28 @@ export default function LoanInterestCalculator() {
           </div>
         </div>
 
-        {/* SEO Content Section */}
         <div className="max-w-2xl mx-auto mt-8 bg-white shadow-md rounded-lg p-8">
           <h2 className="text-2xl font-bold mb-4 text-golden-700">About The Calculator</h2>
           <div className="prose max-w-none">
             <p className="mb-4">
-              Our loan interest calculator helps you understand the true cost of borrowing money. Whether you're considering a personal loan, auto loan, or any other type of financing, this calculator shows you exactly how interest affects your total repayment amount.
+              Our loan interest calculator helps you understand the true cost of borrowing by showing you both the total interest paid and how your monthly payments are split between principal and interest.
             </p>
             <h3 className="text-xl font-semibold mb-3 text-gray-700">How Loan Interest Works</h3>
             <p className="mb-4">
-              Loan interest is calculated based on your principal amount, interest rate, and loan term. Using an amortization formula, we show you how your payments are split between principal and interest over time, helping you make informed borrowing decisions.
+              Loan interest is calculated based on your principal amount, interest rate, and loan term. Using amortization, your monthly payment remains constant while the proportion of principal to interest changes over time.
             </p>
             <h3 className="text-xl font-semibold mb-3 text-gray-700">Key Features</h3>
             <ul className="list-disc pl-6 mb-4">
-              <li>Calculate total interest costs over the loan term</li>
+              <li>Calculate total interest costs</li>
               <li>See monthly payment breakdowns</li>
               <li>Compare different loan scenarios</li>
-              <li>Visualize payment distribution with interactive charts</li>
-              <li>Understand amortization schedules</li>
-            </ul>
-            <h3 className="text-xl font-semibold mb-3 text-gray-700">Tips for Lower Interest Costs</h3>
-            <ul className="list-disc pl-6 mb-4">
-              <li>Choose shorter loan terms when possible</li>
-              <li>Make extra payments toward principal</li>
-              <li>Improve your credit score for better rates</li>
-              <li>Compare offers from multiple lenders</li>
-              <li>Consider refinancing if rates drop</li>
+              <li>Visualize cost distribution</li>
+              <li>Understand amortization impact</li>
             </ul>
           </div>
         </div>
 
-        <ReviewSection calculatorType="loan-interest" />
-
+        <ReviewSection calculatorType={calculatorType} />
         <FAQSection faqs={faqData} />
       </main>
       <Footer />

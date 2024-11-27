@@ -8,7 +8,7 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend,
+  Legend
 } from 'chart.js';
 
 ChartJS.register(
@@ -20,26 +20,36 @@ ChartJS.register(
   Legend
 );
 
-interface CustomBarChartProps {
-  data: any[];
-  bars: {
-    dataKey: string;
-    color: string;
-    name: string;
-  }[];
-  xAxisDataKey: string;
+interface BarChartProps {
+  title: string;
+  data: {
+    labels: string[];
+    primaryValues: number[];
+    secondaryValues: number[];
+    primaryLabel: string;
+    secondaryLabel: string;
+  };
 }
 
-export default function CustomBarChart({ data, bars, xAxisDataKey }: CustomBarChartProps) {
+export default function BarChart({ title, data }: BarChartProps) {
   const chartData = {
-    labels: data.map(item => item[xAxisDataKey]),
-    datasets: bars.map(bar => ({
-      label: bar.name,
-      data: data.map(item => item[bar.dataKey]),
-      backgroundColor: bar.color,
-      borderColor: bar.color,
-      borderWidth: 1,
-    })),
+    labels: data.labels,
+    datasets: [
+      {
+        label: data.primaryLabel,
+        data: data.primaryValues,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1
+      },
+      {
+        label: data.secondaryLabel,
+        data: data.secondaryValues,
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1
+      }
+    ]
   };
 
   const options = {
@@ -66,7 +76,7 @@ export default function CustomBarChart({ data, bars, xAxisDataKey }: CustomBarCh
           }
         }
       }
-    },
+    }
   };
 
   return (
@@ -75,3 +85,4 @@ export default function CustomBarChart({ data, bars, xAxisDataKey }: CustomBarCh
     </div>
   );
 } 
+

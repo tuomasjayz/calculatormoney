@@ -1,15 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
-
-type CalculatorType = 
-  | 'loan-payment'
-  | 'mortgage-interest'
-  | 'credit-card'
-  | 'compound-interest'
-  | 'savings-goal'
-  | 'loan-interest'
-  | 'continuous-compound';
+import { CalculatorType } from '../utils/calculatorTypes';
 
 interface ReviewData {
   count: number;
@@ -36,23 +28,16 @@ const defaultReviews: Record<CalculatorType, ReviewData> = {
 export function ReviewProvider({ children }: { children: React.ReactNode }) {
   const [reviews, setReviews] = useState<Record<CalculatorType, ReviewData>>(defaultReviews);
 
-  const getReviews = (calculatorType: CalculatorType): ReviewData => {
-    return reviews[calculatorType] || defaultReviews[calculatorType];
-  };
-
-  // Load saved reviews after initial render
   useEffect(() => {
     const savedReviews = localStorage.getItem('calculatorReviews');
     if (savedReviews) {
-      const parsedReviews = JSON.parse(savedReviews);
-      // Merge with defaults to ensure all calculators have initial values
-      const mergedReviews = {
-        ...defaultReviews,
-        ...parsedReviews
-      };
-      setReviews(mergedReviews);
+      setReviews({ ...defaultReviews, ...JSON.parse(savedReviews) });
     }
   }, []);
+
+  const getReviews = (calculatorType: CalculatorType): ReviewData => {
+    return reviews[calculatorType] || defaultReviews[calculatorType];
+  };
 
   const updateReview = (calculatorType: CalculatorType, newRating: number) => {
     setReviews(prev => {
@@ -88,10 +73,4 @@ export function useReviews() {
     throw new Error('useReviews must be used within a ReviewProvider');
   }
   return context;
-} 
-
-
-
-
-
-
+}
