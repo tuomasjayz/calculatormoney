@@ -87,7 +87,7 @@ src/
 
 ## Author
 Tuomas J. - Financial Calculator Expert
-[https://fysiokauppa.fi/products/jrw-tens-ems]
+[https://fysiokauppa.fi/]
 
 ## License
 Distributed under the MIT License.
